@@ -1,0 +1,29 @@
+.main{
+    width:75%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: space-around;
+    margin: 0 auto;
+}
+.single-project{
+    border: 1px solid black;
+    height:100px;
+    width:33%;
+    text-align:center;
+}
+h1{
+    text-align: center;
+    margin:auto;
+}
+a{
+    text-decoration:none;
+    padding:5px 10px;
+    border: 2px solid green;
+    margin: auto;
+    background-color:white;
+    color:black;
+}
+a:hover{
+ background-color:green;
+color:white
+}

@@ -1,0 +1,19 @@
+{% load static %}
+<html lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Set of Projects</h1>
+<div class="main">
+{% for x in no_of_projects %}
+    <div class="single-project">
+        <h3>Project {{ x }}</h3>
+        <a href="{{ x }}">Click</a>
+    </div>
+{% endfor %}
+</div>
+</body>
+</html>
