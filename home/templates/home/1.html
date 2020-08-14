@@ -3,23 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'home/1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style1.css' %}">
 </head>
 <body>
+<form>
+    <button formaction="/">Back</button>
+</form>
 <h1>Tic Tac Toe</h1>
-<table>
     {% for row in grid %}
-    <tr>
+<div>
     {% for el in row %}
-            <td>
-        <a href="1/{{forloop.parentloop.counter}}/{{ forloop.counter}}">
-                {{el}}
-        </a>
-            </td>
+            <form>
+                <button formaction="1/{{forloop.parentloop.counter}}/{{ forloop.counter}}">
+                    {{el}}
+                </button>
+            </form>
     {% endfor %}
-    </tr>
+</div>
     {% endfor %}
-</table>
-<a href="1/0/1">Reset</a>
+<form>
+<button formaction="1/0/1" id="reset">Reset</button>
+</form>
+{% for extra in extras %}
+    <p>{{extra}}</p>
+{% endfor %}
 </body>
 </html>

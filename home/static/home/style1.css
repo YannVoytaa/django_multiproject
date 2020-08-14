@@ -1,0 +1,21 @@
+td{
+    width:30px;
+    height:30px;
+    border: 1px solid black;
+    text-align:center;
+}
+form{
+    margin-block-end:0px;
+    width:10%;
+    height:10%;
+    align-items:center;
+    display:inline-block;
+    vertical-align:top;
+}
+button{
+width:100%;
+height:100%;
+}
+#reset{
+    width:305%;
+}
