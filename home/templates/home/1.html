@@ -1,10 +1,25 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'home/1.css' %}">
 </head>
 <body>
-
+<h1>Tic Tac Toe</h1>
+<table>
+    {% for row in grid %}
+    <tr>
+    {% for el in row %}
+            <td>
+        <a href="1/{{forloop.parentloop.counter}}/{{ forloop.counter}}">
+                {{el}}
+        </a>
+            </td>
+    {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+<a href="1/0/1">Reset</a>
 </body>
 </html>
