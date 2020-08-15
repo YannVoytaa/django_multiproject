@@ -1,4 +1,6 @@
 from copy import deepcopy
+import random
+from math import floor
 
 from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.shortcuts import redirect
@@ -10,6 +12,7 @@ def home(request):
         'no_of_projects':[x for x in range(1,NUM_OF_PROJECTS+1)],
     }
     TIC_TAC_TOE.tic_tac_toe(request,0,0)
+    ROCK_PAPER_SCISSORS.__init__()
     return render(request,'home/index.html',context=context)
 class Switcher():
     def trigger(self,nr,request):
@@ -19,13 +22,13 @@ class Switcher():
     def f1(self,request):
         return TIC_TAC_TOE.play(request)
     def f2(self,request):
-        return render(request,'home/2.html')
+        return ROCK_PAPER_SCISSORS.play(request)
 
 def project(request,number):
     return SWITCHER.trigger(str(number),request)
 
 BASIC_GRID=[['' for x in range(3)] for y in range(3)]
-MAPPED={
+TTT_MAPPED={
     0:'O',
     1:'X',
 }
@@ -69,11 +72,34 @@ class Tic_Tac_Toe():
             }
             return HttpResponseRedirect(reverse('project',args=[1]))
         if self.grid[row-1][col-1]=='' and not self.check():
-            self.grid[row-1][col-1]=MAPPED[self.turn]
+            self.grid[row-1][col-1]=TTT_MAPPED[self.turn]
             if self.check():
                 self.context['extras'].append('Player ' + str(self.turn + 1)+' Won!')
                 return HttpResponseRedirect(reverse('project', args=[1]))
             self.turn=1-self.turn
         return HttpResponseRedirect(reverse('project',args=[1]))
+
+RPS_MAPPED={
+    0:'Rock',
+    1:'Paper',
+    2:'Scissors',
+}
+class Rock_Paper_Scissors():
+    def __init__(self):
+        self.choice=0
+        self.context={}
+    def play(self,request):
+        return render(request,'home/2.html',context=self.context)
+    def rock_paper_scissors(self,request,nr):
+        self.choice = floor(random.random() * 3)
+        self.context = {'enemy':'Enemy chose '+RPS_MAPPED[self.choice]}
+        if nr==self.choice:
+            self.context['winner']="It's a draw"
+        elif nr==self.choice+1 or nr+2==self.choice:
+            self.context['winner']="You won"
+        else:
+            self.context['winner']="You lost"
+        return HttpResponseRedirect(reverse('project',args=[2]))
 SWITCHER=Switcher()
 TIC_TAC_TOE=Tic_Tac_Toe()
+ROCK_PAPER_SCISSORS=Rock_Paper_Scissors()

@@ -26,7 +26,7 @@ SECRET_KEY = '0&#t(z0s-u^s^ss+2pp&cra@#lrvge!yg#s=b@9v^jw1$4zslu'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+STATIC_URL='/static/'
 
 # Application definition
 

@@ -1,10 +1,39 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style2.css' %}">
 </head>
 <body>
-
+<h1>Rock Paper Scissors</h1>
+<div>
+    <div class="inline">
+        <h1>
+            Choose Rock
+        </h1>
+        <form>
+            <button formaction="/2/0">Click</button>
+        </form>
+    </div>
+    <div class="inline">
+        <h1>
+            Choose Paper
+        </h1>
+        <form>
+            <button formaction="/2/1">Click</button>
+        </form>
+    </div>
+    <div class="inline">
+        <h1>
+            Choose Scissors
+        </h1>
+        <form>
+            <button formaction="/2/2">Click</button>
+        </form>
+    </div>
+</div>
+<p>{{ enemy }}</p>
+<p>{{ winner }}</p>
 </body>
 </html>
