@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Roboto+Condensed&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'home/style1.css' %}">
 </head>
 <body>
@@ -10,8 +11,8 @@
     <button formaction="/">Back</button>
 </form>
 <h1>Tic Tac Toe</h1>
+<div id="content">
     {% for row in grid %}
-<div>
     {% for el in row %}
             <form>
                 <button formaction="1/{{forloop.parentloop.counter}}/{{ forloop.counter}}">
@@ -19,13 +20,13 @@
                 </button>
             </form>
     {% endfor %}
-</div>
     {% endfor %}
 <form>
 <button formaction="1/0/1" id="reset">Reset</button>
 </form>
+</div>
 {% for extra in extras %}
-    <p>{{extra}}</p>
+    <p class="para">{{extra}}</p>
 {% endfor %}
 </body>
 </html>

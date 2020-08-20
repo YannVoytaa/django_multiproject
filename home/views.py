@@ -41,7 +41,11 @@ class Tic_Tac_Toe():
             'extras':[],
         }
     def play(self,request):
-        self.context['extras'].append('Move: Player '+str(self.turn+1))
+        if len(self.context['extras'])>0 and self.context['extras'][0].startswith("Player"):
+            pass
+        else:
+            self.context['extras']=[]
+            self.context['extras'].append('Move: Player '+str(self.turn+1))
         return render(request,'home/1.html',context=self.context)
     def check(self):
         if self.grid[0][0]==self.grid[0][1]==self.grid[0][2]!='':
