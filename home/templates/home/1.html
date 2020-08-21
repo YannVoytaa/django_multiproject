@@ -7,9 +7,19 @@
     <link rel="stylesheet" type="text/css" href="{% static 'home/style1.css' %}">
 </head>
 <body>
-<form>
-    <button formaction="/">Back</button>
-</form>
+<nav>
+    <form>
+        <button class="navy" formaction="/">Home</button>
+    </form>
+    <form align="right" id="log">
+        <button class="navy"
+                {% if logged_in %}
+                formaction="3/logout">Logout</button>
+                {% else %}
+                formaction="#">Register / Login</button>
+                {% endif %}
+    </form>
+</nav>
 <h1>Tic Tac Toe</h1>
 <div id="content">
     {% for row in grid %}

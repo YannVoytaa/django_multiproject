@@ -3,8 +3,9 @@ import random
 from math import floor
 
 from django.shortcuts import render,HttpResponse,HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect,get_object_or_404
 from django.urls import reverse
+from .models import Clicker_User
 NUM_OF_PROJECTS=7
 # Create your views here.
 def home(request):
@@ -23,6 +24,8 @@ class Switcher():
         return TIC_TAC_TOE.play(request)
     def f2(self,request):
         return ROCK_PAPER_SCISSORS.play(request)
+    def f3(self,request):
+        return CLICKER.play(request)
 
 def project(request,number):
     return SWITCHER.trigger(str(number),request)
@@ -104,6 +107,45 @@ class Rock_Paper_Scissors():
         else:
             self.context['winner']="You lost"
         return HttpResponseRedirect(reverse('project',args=[2]))
+
+
+class Clicker():
+    def __init__(self):
+        self.user=None
+        self.context={'user':self.user}
+    def play(self,request):
+        return render(request,'home/3.html',context=self.context)
+    def register(self,request):
+        potential=Clicker_User.objects.filter(username=request.POST['login'])
+        if len(potential)==0:
+            new_user=Clicker_User(username=request.POST['login'],password=request.POST['password'],money=0)
+            new_user.save()
+            self.user=new_user
+            self.context['user']=self.user
+            self.context['logged_in']={'money':new_user.money}
+        else:
+            self.context['extra']=True
+        return HttpResponseRedirect(reverse('project',args=[3]))
+    def login(self,request):
+        self.user=get_object_or_404(Clicker_User,username=request.POST['login'],password=request.POST['password'])
+        self.user.money+=1
+        self.user.save()
+        self.context['user'] = self.user
+        self.context['logged_in']={'money':self.user.money}
+        return HttpResponseRedirect(reverse('project', args=[3]))
+    def logout(self,request):
+        self.user=None
+        self.context={}
+        return HttpResponseRedirect(reverse('project', args=[3]))
+    def get(self,request):
+        self.user.money+=1
+        self.user.save()
+        self.context['logged_in'] = {'money': self.user.money}
+        return HttpResponseRedirect(reverse('project', args=[3]))
+
+
+
 SWITCHER=Switcher()
 TIC_TAC_TOE=Tic_Tac_Toe()
 ROCK_PAPER_SCISSORS=Rock_Paper_Scissors()
+CLICKER=Clicker()

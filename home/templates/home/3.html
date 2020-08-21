@@ -1,10 +1,47 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style3.css' %}">
 </head>
 <body>
+<nav>
+    <form>
+        <button formaction="/">Home</button>
+    </form>
+    <form align="right" id="log">
+        <button
+                {% if logged_in %}
+                formaction="3/logout">Logout</button>
+                {% else %}
+                formaction="#">Register / Login</button>
+                {% endif %}
+    </form>
+</nav>
+{% if logged_in %}
+<p>Hi, {{user.username}}</p>
+<p>You have {{logged_in.money}} coins!</p>
+<div style="text-align:center">
+<a href="3/get">Click to have more</a>
+</div>
+{% else %}
+<form method="post">
+    {% csrf_token %}
+<div id="login">
+    <input type="text" name="login" placeholder="Login">
+    <input type="password" name="password" placeholder="Password">
+    <div>
+        <button formaction="3/register">Register</button>
+        <button formaction="3/login">Login</button>
+    </div>
+</div>
+{% if extra %}
+    <p style="color:red">User with such login exists</p>
+{% endif %}
+</form>
+{% endif %}
 
 </body>
 </html>
