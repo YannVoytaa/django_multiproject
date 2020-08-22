@@ -9,4 +9,6 @@ urlpatterns=[
     path('3/login',views.CLICKER.login,name='clicker_login'),
     path('3/logout',views.CLICKER.logout,name='clicker_logout'),
     path('3/get',views.CLICKER.get,name='clicker_get'),
+    path('4/randomize',views.BFS.randomize,name='bfs_randomize'),
+    path('4/simulate',views.BFS.simulate,name='bfs_simulate'),
 ]

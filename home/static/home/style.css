@@ -17,10 +17,12 @@ body{
 }
 .single-project{
     border: 1px solid black;
-    height:100px;
+    height:115px;
     width:33%;
+    min-width:200px;
     text-align:center;
     margin:10px;
+    box-shadow: 0px 0px 24px 0px rgba(0,0,0,0.8);
 }
 h1{
     font-family:'Roboto Condensed',sans-serif;

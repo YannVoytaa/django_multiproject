@@ -9,11 +9,20 @@ from .models import Clicker_User
 NUM_OF_PROJECTS=7
 # Create your views here.
 def home(request):
+    context_list=[
+        {'name':'Tic Tac Toe','href':1},
+        {'name': 'Rock Paper Scissors', 'href': 2},
+        {'name': 'Clicker', 'href': 3},
+        {'name':'Bfs','href':4}
+    ]
+    for x in range(len(context_list)+1,NUM_OF_PROJECTS+1):
+        context_list.append({'name':'Project '+str(x),'href':x})
     context={
-        'no_of_projects':[x for x in range(1,NUM_OF_PROJECTS+1)],
+        'no_of_projects':context_list,
     }
     TIC_TAC_TOE.tic_tac_toe(request,0,0)
     ROCK_PAPER_SCISSORS.__init__()
+    BFS.__init__()
     return render(request,'home/index.html',context=context)
 class Switcher():
     def trigger(self,nr,request):
@@ -26,7 +35,8 @@ class Switcher():
         return ROCK_PAPER_SCISSORS.play(request)
     def f3(self,request):
         return CLICKER.play(request)
-
+    def f4(self,request):
+        return BFS.play(request)
 def project(request,number):
     return SWITCHER.trigger(str(number),request)
 
@@ -143,9 +153,73 @@ class Clicker():
         self.context['logged_in'] = {'money': self.user.money}
         return HttpResponseRedirect(reverse('project', args=[3]))
 
-
-
+class Bfs():
+    def __init__(self):
+        self.size=10
+        grid=[]
+        for x in range(self.size):
+            row=[]
+            for y in range(self.size):
+                r=random.random()
+                if r<0.1:
+                    row.append(1)
+                else:
+                    row.append(0)
+            grid.append(deepcopy(row))
+        self.dist=[[None for x in range(self.size)] for y in range(self.size)]
+        start,end=(floor(random.random()*self.size),floor(random.random()*self.size)),(floor(random.random()*self.size),floor(random.random()*self.size))
+        while start==end:
+            end = (floor(random.random() * self.size), floor(random.random() * self.size))
+        grid[start[0]][start[1]]=2
+        grid[end[0]][end[1]]=3
+        self.start,self.end=start,end
+        self.grid=[]
+        for x in range(self.size):
+            row=[]
+            for y in range(self.size):
+                row.append([grid[x][y],self.dist[x][y]])
+            self.grid.append(deepcopy(row))
+        self.context={
+            'grid':self.grid,
+        }
+    def play(self,request):
+        return render(request,'home/4.html',context=self.context)
+    def randomize(self,request):
+        self.__init__()
+        return HttpResponseRedirect(reverse('project',args=[4]))
+    def simulate(self,request):
+        q=[]
+        q.append(self.start)
+        self.dist=[[None for x in range(self.size)] for y in range(self.size)]
+        self.dist[self.start[0]][self.start[1]]=0
+        while len(q)>0:
+            akt=q[0]
+            q=q[1:]
+            if akt[1]-1>=0 and self.dist[akt[0]][akt[1]-1]==None and self.grid[akt[0]][akt[1]-1][0]!=1:
+                self.dist[akt[0]][akt[1]-1]=self.dist[akt[0]][akt[1]]+1
+                q.append((akt[0],akt[1]-1))
+            if akt[0]-1>=0 and self.dist[akt[0]-1][akt[1]]==None and self.grid[akt[0]-1][akt[1]][0]!=1:
+                self.dist[akt[0]-1][akt[1]]=self.dist[akt[0]][akt[1]]+1
+                q.append((akt[0]-1, akt[1]))
+            if akt[1]+1<self.size and self.dist[akt[0]][akt[1]+1]==None and self.grid[akt[0]][akt[1]+1][0]!=1:
+                self.dist[akt[0]][akt[1]+1]=self.dist[akt[0]][akt[1]]+1
+                q.append((akt[0], akt[1] + 1))
+            if akt[0]+1<self.size and self.dist[akt[0]+1][akt[1]]==None and self.grid[akt[0]+1][akt[1]][0]!=1:
+                self.dist[akt[0]+1][akt[1]]=self.dist[akt[0]][akt[1]]+1
+                q.append((akt[0]+1, akt[1]))
+        newgrid = []
+        for x in range(self.size):
+            row = []
+            for y in range(self.size):
+                row.append([self.grid[x][y][0], self.dist[x][y]])
+            newgrid.append(deepcopy(row))
+        self.grid=deepcopy(newgrid)
+        self.context = {
+            'grid': self.grid,
+        }
+        return HttpResponseRedirect(reverse('project',args=[4]))
 SWITCHER=Switcher()
 TIC_TAC_TOE=Tic_Tac_Toe()
 ROCK_PAPER_SCISSORS=Rock_Paper_Scissors()
 CLICKER=Clicker()
+BFS=Bfs()

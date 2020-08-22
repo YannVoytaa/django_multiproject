@@ -12,8 +12,8 @@
     <div class="main">
     {% for x in no_of_projects %}
         <div class="single-project">
-            <h3>Project {{ x }}</h3>
-            <a href="{{ x }}">Click</a>
+            <h3>{{ x.name }}</h3>
+            <a href="{{ x.href }}">Click</a>
         </div>
     {% endfor %}
     </div>

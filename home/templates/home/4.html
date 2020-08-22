@@ -1,10 +1,46 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style4.css' %}">
 </head>
 <body>
+<div id="main">
 
+<nav>
+    <form>
+        <button formaction="/">Home</button>
+    </form>
+    <form>
+        <button formaction="4/randomize">New random Grid</button>
+    </form>
+    <form>
+        <button formaction="4/simulate">Simulate BFS</button>
+    </form>
+</nav>
+<div id="grid">
+    {% for x in grid %}
+        <div class="grid-row">
+        {% for y in x %}
+            <div class="grid-el
+            {% if y.0 == 0 %}
+                 normal"
+            {% elif y.0 == 1 %}
+                 block"
+            {% elif y.0 == 2 %}
+                 start"
+            {% elif y.0 == 3 %}
+                 end"
+            {% endif %}
+            >
+            <h2>{% if y.1 != None %}{{y.1}}{% else %}{% endif %}</h2>
+            </div>
+        {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+</div>
 </body>
 </html>
