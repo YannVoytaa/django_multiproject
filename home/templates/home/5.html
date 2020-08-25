@@ -1,10 +1,31 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style1.css' %}">
 </head>
 <body>
-
+<form>
+    <button formaction="/">Back</button>
+</form>
+<h1>Tic Tac Toe</h1>
+    {% for row in grid %}
+<div>
+    {% for el in row %}
+            <form>
+                <button formaction="1/{{forloop.parentloop.counter}}/{{ forloop.counter}}">
+                    {{el}}
+                </button>
+            </form>
+    {% endfor %}
+</div>
+    {% endfor %}
+<form>
+<button formaction="1/0/1" id="reset">Reset</button>
+</form>
+{% for extra in extras %}
+    <p>{{extra}}</p>
+{% endfor %}
 </body>
 </html>
