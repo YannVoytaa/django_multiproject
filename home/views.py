@@ -13,7 +13,8 @@ def home(request):
         {'name':'Tic Tac Toe','href':1},
         {'name': 'Rock Paper Scissors', 'href': 2},
         {'name': 'Clicker', 'href': 3},
-        {'name':'Bfs','href':4}
+        {'name':'Bfs','href':4},
+        {'name':'Tic Tac Toe JS','href':5},
     ]
     for x in range(len(context_list)+1,NUM_OF_PROJECTS+1):
         context_list.append({'name':'Project '+str(x),'href':x})
@@ -37,6 +38,12 @@ class Switcher():
         return CLICKER.play(request)
     def f4(self,request):
         return BFS.play(request)
+    def f5(self,request):
+        return TIC_TAC_TOE2.play(request)
+    def f6(self,request):
+        return ROCK_PAPER_SCISSORS2.play(request)
+    def f7(self,request):
+        return CLICKER2.play(request)
 def project(request,number):
     return SWITCHER.trigger(str(number),request)
 
@@ -223,3 +230,122 @@ TIC_TAC_TOE=Tic_Tac_Toe()
 ROCK_PAPER_SCISSORS=Rock_Paper_Scissors()
 CLICKER=Clicker()
 BFS=Bfs()
+
+
+
+
+
+
+
+
+class Tic_Tac_Toe2():
+    def __init__(self):
+        self.grid=deepcopy(BASIC_GRID)
+        self.turn=0
+        self.context = {
+            'grid': self.grid,
+            'extras':[],
+        }
+    def play(self,request):
+        if len(self.context['extras'])>0 and self.context['extras'][0].startswith("Player"):
+            pass
+        else:
+            self.context['extras']=[]
+            self.context['extras'].append('Move: Player '+str(self.turn+1))
+        return render(request,'home/5.html',context=self.context)
+    def check(self):
+        if self.grid[0][0]==self.grid[0][1]==self.grid[0][2]!='':
+            return True
+        if self.grid[1][0]==self.grid[1][1]==self.grid[1][2]!='':
+            return True
+        if self.grid[2][0]==self.grid[2][1]==self.grid[2][2]!='':
+            return True
+        if self.grid[0][0]==self.grid[1][0]==self.grid[2][0]!='':
+            return True
+        if self.grid[0][1] == self.grid[1][1] == self.grid[2][1] != '':
+            return True
+        if self.grid[0][2] == self.grid[1][2] == self.grid[2][2] != '':
+            return True
+        if self.grid[0][0]==self.grid[1][1]==self.grid[2][2]!='':
+            return True
+        if self.grid[0][2]==self.grid[1][1]==self.grid[2][0]!='':
+            return True
+    def tic_tac_toe(self,request,row,col):
+        global TIC_TAC_TOE
+        self.context['extras']=[]
+        if row==0:
+            self.grid=deepcopy(BASIC_GRID)
+            self.turn = 0
+            self.context={
+                'grid':self.grid,
+                'extras':[],
+            }
+            return HttpResponseRedirect(reverse('project',args=[5]))
+        if self.grid[row-1][col-1]=='' and not self.check():
+            self.grid[row-1][col-1]=TTT_MAPPED[self.turn]
+            if self.check():
+                self.context['extras'].append('Player ' + str(self.turn + 1)+' Won!')
+                return HttpResponseRedirect(reverse('project', args=[5]))
+            self.turn=1-self.turn
+        return HttpResponseRedirect(reverse('project',args=[5]))
+
+RPS_MAPPED={
+    0:'Rock',
+    1:'Paper',
+    2:'Scissors',
+}
+class Rock_Paper_Scissors2():
+    def __init__(self):
+        self.choice=0
+        self.context={}
+    def play(self,request):
+        return render(request,'home/6.html',context=self.context)
+    def rock_paper_scissors(self,request,nr):
+        self.choice = floor(random.random() * 3)
+        self.context = {'enemy':'Enemy chose '+RPS_MAPPED[self.choice]}
+        if nr==self.choice:
+            self.context['winner']="It's a draw"
+        elif nr==self.choice+1 or nr+2==self.choice:
+            self.context['winner']="You won"
+        else:
+            self.context['winner']="You lost"
+        return HttpResponseRedirect(reverse('project',args=[6]))
+
+
+class Clicker2():
+    def __init__(self):
+        self.user=None
+        self.context={'user':self.user}
+    def play(self,request):
+        return render(request,'home/7.html',context=self.context)
+    def register(self,request):
+        potential=Clicker_User.objects.filter(username=request.POST['login'])
+        if len(potential)==0:
+            new_user=Clicker_User(username=request.POST['login'],password=request.POST['password'],money=0)
+            new_user.save()
+            self.user=new_user
+            self.context['user']=self.user
+            self.context['logged_in']={'money':new_user.money}
+        else:
+            self.context['extra']=True
+        return HttpResponseRedirect(reverse('project',args=[7]))
+    def login(self,request):
+        self.user=get_object_or_404(Clicker_User,username=request.POST['login'],password=request.POST['password'])
+        self.user.money+=1
+        self.user.save()
+        self.context['user'] = self.user
+        self.context['logged_in']={'money':self.user.money}
+        return HttpResponseRedirect(reverse('project', args=[7]))
+    def logout(self,request):
+        self.user=None
+        self.context={}
+        return HttpResponseRedirect(reverse('project', args=[7]))
+    def get(self,request):
+        self.user.money+=1
+        self.user.save()
+        self.context['logged_in'] = {'money': self.user.money}
+        return HttpResponseRedirect(reverse('project', args=[7]))
+
+TIC_TAC_TOE2=Tic_Tac_Toe2()
+ROCK_PAPER_SCISSORS2=Rock_Paper_Scissors2()
+CLICKER2=Clicker2()

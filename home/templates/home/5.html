@@ -1,10 +1,43 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style1.css' %}">
 </head>
 <body>
-
+<nav>
+    <form>
+        <button class="navy" formaction="/">Home</button>
+    </form>
+    <form align="right" id="log">
+        <button class="navy"
+                {% if logged_in %}
+                formaction="3/logout">Logout</button>
+                {% else %}
+                formaction="#">Register / Login</button>
+                {% endif %}
+    </form>
+</nav>
+<h1>Tic Tac Toe</h1>
+<div id="content">
+    {% for row in grid %}
+    {% for el in row %}
+                <button
+                        id="button{{forloop.parentloop.counter}}{{ forloop.counter}}"
+                        ">
+                    {{el}}
+                </button>
+    {% endfor %}
+    {% endfor %}
+<form>
+<button formaction="5" id="reset">Reset</button>
+</form>
+</div>
+{% for extra in extras %}
+    <p class="para" id="move">{{extra}}</p>
+{% endfor %}
+<script src="{% static 'home/script1.js' %}"></script>
 </body>
 </html>

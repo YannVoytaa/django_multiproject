@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 TEMPLATE_DIR = BASE_DIR.joinpath('templates')
@@ -26,8 +26,6 @@ SECRET_KEY = '0&#t(z0s-u^s^ss+2pp&cra@#lrvge!yg#s=b@9v^jw1$4zslu'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-STATIC_URL='/static/'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -118,4 +116,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL='/static/'
+STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'dist')
